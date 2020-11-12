@@ -1,0 +1,27 @@
+GET http://localhost:3030/settings
+
+###
+
+POST http://localhost:3030/settings
+Content-Type: application/json
+
+{
+    "show_tags": true
+}
+
+
+###
+
+GET http://localhost:3030/aircraft
+
+###
+
+POST http://localhost/aircraft
+Content-Type: application/json
+
+{
+    "name": "ac_a",
+    "latitude": 12.34,
+    "longitude": 165.12,
+    "altitude": 4032.1
+}
