@@ -6,7 +6,7 @@ POST http://localhost:3030/settings
 Content-Type: application/json
 
 {
-    "show_tags": true
+    "show_tags": false
 }
 
 
@@ -16,12 +16,33 @@ GET http://localhost:3030/aircraft
 
 ###
 
-POST http://localhost/aircraft
+POST http://localhost:3030/aircraft
 Content-Type: application/json
 
 {
     "name": "ac_a",
-    "latitude": 12.34,
+    "latitude": 13.34,
     "longitude": 165.12,
     "altitude": 4032.1
 }
+
+###
+
+POST http://localhost:3030/aircraft
+Content-Type: application/json
+
+{
+    "name": "ac_b",
+    "latitude": 13.5,
+    "longitude": 165.12,
+    "altitude": 4032.1
+}
+
+
+###
+
+POST http://localhost:3030/log
+
+random data
+
+and stuff

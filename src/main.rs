@@ -18,6 +18,7 @@ mod filters {
             .or(set_settings(db.clone()))
             .or(get_aircraft(db.clone()))
             .or(set_aircraft(db.clone()))
+            .or(log_body())
     }
 
     fn get_settings(
@@ -58,6 +59,13 @@ mod filters {
             .and_then(handlers::set_aircraft)
     }
 
+    fn log_body() -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
+        warp::path!("log")
+            .and(warp::post())
+            .and(warp::body::bytes())
+            .and_then(handlers::log_body)
+    }
+
     fn with_db(db: Db) -> impl Filter<Extract = (Db,), Error = std::convert::Infallible> + Clone {
         warp::any().map(move || db.clone())
     }
@@ -67,6 +75,8 @@ mod handlers {
     use super::models::{AircraftData, Db, Settings};
     use std::convert::Infallible;
     use std::time::{Duration, Instant};
+    use warp::hyper::body::Bytes;
+    use warp::Buf;
 
     pub async fn get_settings(db: Db) -> Result<impl warp::Reply, Infallible> {
         let state = db.lock().await;
@@ -111,6 +121,16 @@ mod handlers {
         };
 
         Ok(warp::reply::json(&state.settings))
+    }
+
+    pub async fn log_body(bs: Bytes) -> Result<impl warp::Reply, Infallible> {
+        match std::str::from_utf8(&bs.bytes()) {
+            Ok(data) => {
+                println!("log recv: {}", data);
+                Ok(warp::reply())
+            }
+            Err(_) => Ok(warp::reply()),
+        }
     }
 }
 
